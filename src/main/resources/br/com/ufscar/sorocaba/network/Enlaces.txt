@@ -1,0 +1,5 @@
+Um enlace perda-justa possui a importante propriedade que uma mensagem enviada um número infinito de vezes será recebida um número infinito de vezes. Rescreva esta propriedade em termos do número de mensagens perdidas. Justifique.
+
+Um número infinito de mensagens enviados do processo P para o processo Q é perdida enquanto apenas P é um processo correto.
+
+Dado dois processos P e Q, onde apenas P é um processo correto, não existe nenhuma garantia que o processo Q (falha) receba as mensagens de P (correto). Durante o período de falha de Q, infinitas mensagens serão perdidas até que o processo Q recupere-se e volte a ser um processo correto. Desde que P e Q sejam processos corretos uma mensagem enviada um número infinito de vezes será recebida um número infinito de vezes.

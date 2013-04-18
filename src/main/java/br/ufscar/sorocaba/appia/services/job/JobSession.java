@@ -1,7 +1,7 @@
 package br.ufscar.sorocaba.appia.services.job;
 
-import static br.ufscar.sorocaba.appia.util.EventUtils.go;
-import static br.ufscar.sorocaba.appia.util.EventUtils.initAndGo;
+import static br.ufscar.sorocaba.appia.util.AppiaUtils.go;
+import static br.ufscar.sorocaba.appia.util.AppiaUtils.initAndGo;
 import net.sf.appia.core.Direction;
 import net.sf.appia.core.Event;
 import net.sf.appia.core.Layer;

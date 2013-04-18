@@ -1,9 +1,8 @@
 package br.ufscar.sorocaba.appia.services.job.executor;
 
+import static br.ufscar.sorocaba.appia.util.AppiaUtils.createQoS;
+import static br.ufscar.sorocaba.appia.util.AppiaUtils.start;
 import net.sf.appia.core.Appia;
-import net.sf.appia.core.AppiaDuplicatedSessionsException;
-import net.sf.appia.core.AppiaInvalidQoSException;
-import net.sf.appia.core.Channel;
 import net.sf.appia.core.Layer;
 import net.sf.appia.core.QoS;
 import br.ufscar.sorocaba.appia.services.job.JobApplicationLayer;
@@ -21,21 +20,4 @@ public class JobExecutor {
 		System.out.println("Starting Appia...");
 		Appia.run();
 	}
-	
-	private static QoS createQoS(String name, Layer[] queue) {
-		try {
-			return new QoS(name, queue);
-		} catch (AppiaInvalidQoSException e) {
-			throw new RuntimeException(e);
-		}
-	}
-	
-	private static void start(Channel channel) {
-		try {
-			channel.start();
-		} catch (AppiaDuplicatedSessionsException e) {
-			throw new RuntimeException("Error in start", e);
-		}
-	}
-
 }

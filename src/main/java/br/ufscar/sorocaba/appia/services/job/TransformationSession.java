@@ -1,7 +1,7 @@
 package br.ufscar.sorocaba.appia.services.job;
 
-import static br.ufscar.sorocaba.appia.util.EventUtils.go;
-import static br.ufscar.sorocaba.appia.util.EventUtils.initAndGo;
+import static br.ufscar.sorocaba.appia.util.AppiaUtils.go;
+import static br.ufscar.sorocaba.appia.util.AppiaUtils.initAndGo;
 import static org.apache.commons.lang.StringUtils.upperCase;
 import net.sf.appia.core.Channel;
 import net.sf.appia.core.Direction;
@@ -33,9 +33,9 @@ public class TransformationSession extends Session {
 		} catch (Exception e) {
 			sendTransformationFault(request.getChannel());
 		}
-		
-		go(request);
+
 		sendJobConfirm(request);
+		go(request);
 	}
 
 	private void sendTransformationFault(Channel channel) {

@@ -1,6 +1,6 @@
 package br.ufscar.sorocaba.appia.services.job;
 
-import static br.ufscar.sorocaba.appia.util.EventUtils.go;
+import static br.ufscar.sorocaba.appia.util.AppiaUtils.go;
 
 import java.io.BufferedReader;
 import java.io.IOException;

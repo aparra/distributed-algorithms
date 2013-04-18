@@ -1,0 +1,46 @@
+Utilizando a notação de módulo e de implementação apresentada em sala, construa a interface e forneça o pseudo-código da implementação do se- guinte serviço:
+
+Requisições: Armazena: recebe um inteiro e o armazena.
+Indicações: Centena: indica que a soma dos inteiros armazenados ultrapassou uma centena, para todas as centenas.
+
+Complemente o seu módulo com uma propriedade qualquer, respeitada pela implementação.
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+Module:
+	Name: StorageHandler, instance sh.
+Events:
+	Request: <sh, Submit | data>: Request com o número inteiro para ser armazenado.
+	Indication: <sh, Centena | storage>: Indica que a soma dos inteiros armazenados ultrapassou uma centena.
+	
+Implements:
+	StotageHandler, instance sh.
+	
+Properties:
+	SH1: Garantia de resposta: Todo overflow de centena deve ser indicado.
+
+uppon event <sh, Init> do
+	storage := 0;
+	centena := 0;
+	resto := 0;
+
+uppon event <sh, Submit | data> do
+	centena := centena + {data} / 100;
+	resto := resto U {data} % 100
+	
+uppon centena != 0 do
+	storage := storage + 100;
+	centena := centena - 1;
+	
+	trigger <sh, Centena | storage>;
+
+uppon resto != 0 do
+	data := select(resto) 
+	storage := storage + data;
+	
+	if (storage % 100) + data >= 100 do
+		trigger <sh, Centena | storage>;
+	
+	resto := resto / {data};	
+	
+		
