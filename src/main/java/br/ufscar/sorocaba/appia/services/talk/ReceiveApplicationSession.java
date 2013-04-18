@@ -20,7 +20,7 @@ import br.ufscar.sorocaba.appia.services.talk.model.SimpleMessage;
 
 public class ReceiveApplicationSession extends Session {
 
-	private InetSocketAddress home = creanteSocketAddress("localhost", 8899);
+	private InetSocketAddress home = creanteSocketAddress("localhost:8899");
 	
 	public ReceiveApplicationSession(Layer layer) {
 		super(layer);

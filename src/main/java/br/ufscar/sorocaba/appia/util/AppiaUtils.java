@@ -47,9 +47,10 @@ public class AppiaUtils {
 		}
 	}
 	
-	public static InetSocketAddress creanteSocketAddress(String adrress, int port) {
+	public static InetSocketAddress creanteSocketAddress(String address) {
 		try {
-			return new InetSocketAddress(InetAddress.getByName(adrress), port);
+			String[] tokenAddress = address.split(":");
+			return new InetSocketAddress(InetAddress.getByName(tokenAddress[0]), Integer.valueOf(tokenAddress[1]));
 		} catch (UnknownHostException e) {
 			throw new RuntimeException(e);
 		}

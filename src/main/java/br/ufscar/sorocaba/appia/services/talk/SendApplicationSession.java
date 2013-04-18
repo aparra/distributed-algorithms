@@ -24,7 +24,7 @@ import br.ufscar.sorocaba.appia.services.talk.model.SimpleMessage;
 public class SendApplicationSession extends Session {
 
 	private MessageReader reader = null;
-	private InetSocketAddress home = creanteSocketAddress("localhost", 9988);
+	private InetSocketAddress home = creanteSocketAddress("localhost:9988");
 
 	public SendApplicationSession(Layer layer) {
 		super(layer);
