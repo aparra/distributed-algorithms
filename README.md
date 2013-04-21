@@ -23,4 +23,5 @@ Exercícios da disciplina de algoritmos distribuídos ministrada por Gustavo M. 
 ## Lista de exercícios usando appia
 
 Exercício 1: br.ufscar.sorocaba.appia.services.job
+
 Exercício 2: br.ufscar.sorocaba.appia.services.talk 
