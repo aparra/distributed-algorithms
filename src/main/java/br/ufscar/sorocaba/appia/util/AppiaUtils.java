@@ -11,6 +11,7 @@ import net.sf.appia.core.Channel;
 import net.sf.appia.core.Event;
 import net.sf.appia.core.Layer;
 import net.sf.appia.core.QoS;
+import net.sf.appia.core.events.SendableEvent;
 
 public class AppiaUtils {
 
@@ -30,7 +31,7 @@ public class AppiaUtils {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static QoS createQoS(String name, Layer[] queue) {
 		try {
 			return new QoS(name, queue);
@@ -52,6 +53,14 @@ public class AppiaUtils {
 			String[] tokenAddress = address.split(":");
 			return new InetSocketAddress(InetAddress.getByName(tokenAddress[0]), Integer.valueOf(tokenAddress[1]));
 		} catch (UnknownHostException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	public static SendableEvent clone(SendableEvent event) {
+		try {
+			return (SendableEvent) event.cloneEvent();
+		} catch (CloneNotSupportedException e) {
 			throw new RuntimeException(e);
 		}
 	}

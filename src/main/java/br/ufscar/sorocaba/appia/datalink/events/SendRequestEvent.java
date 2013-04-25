@@ -1,4 +1,4 @@
-package br.ufscar.sorocaba.appia.services.talk.events;
+package br.ufscar.sorocaba.appia.datalink.events;
 
 import static br.ufscar.sorocaba.appia.util.AppiaUtils.creanteSocketAddress;
 

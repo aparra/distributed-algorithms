@@ -1,4 +1,4 @@
-package br.ufscar.sorocaba.appia.services.talk;
+package br.ufscar.sorocaba.appia.datalink;
 
 import static br.ufscar.sorocaba.appia.util.AppiaUtils.creanteSocketAddress;
 import static br.ufscar.sorocaba.appia.util.AppiaUtils.go;
@@ -14,9 +14,9 @@ import net.sf.appia.core.Session;
 import net.sf.appia.core.events.channel.ChannelInit;
 import net.sf.appia.core.message.Message;
 import net.sf.appia.protocols.common.RegisterSocketEvent;
-import br.ufscar.sorocaba.appia.services.talk.events.ReceiveConfirmEvent;
-import br.ufscar.sorocaba.appia.services.talk.events.SendRequestEvent;
-import br.ufscar.sorocaba.appia.services.talk.model.SimpleMessage;
+import br.ufscar.sorocaba.appia.datalink.events.ReceiveConfirmEvent;
+import br.ufscar.sorocaba.appia.datalink.events.SendRequestEvent;
+import br.ufscar.sorocaba.appia.datalink.model.SimpleMessage;
 
 public class ReceiveApplicationSession extends Session {
 

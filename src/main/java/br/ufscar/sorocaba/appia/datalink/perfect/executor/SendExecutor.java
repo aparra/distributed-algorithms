@@ -1,4 +1,4 @@
-package br.ufscar.sorocaba.appia.services.talk.executor;
+package br.ufscar.sorocaba.appia.datalink.perfect.executor;
 
 import static br.ufscar.sorocaba.appia.util.AppiaUtils.createQoS;
 import static br.ufscar.sorocaba.appia.util.AppiaUtils.start;
@@ -9,17 +9,19 @@ import net.sf.appia.core.ChannelCursor;
 import net.sf.appia.core.Layer;
 import net.sf.appia.core.QoS;
 import net.sf.appia.protocols.udpsimple.UdpSimpleLayer;
-import br.ufscar.sorocaba.appia.services.talk.SendApplicationLayer;
+import br.ufscar.sorocaba.appia.datalink.SendApplicationLayer;
+import br.ufscar.sorocaba.appia.datalink.perfect.ClockLayer;
+import br.ufscar.sorocaba.appia.datalink.perfect.StubbornLinkLayer;
 
 public class SendExecutor {
 
 	public static void main(String[] args) {
-		Layer[] queue = { new UdpSimpleLayer(), new SendApplicationLayer() };
+		Layer[] queue = { new UdpSimpleLayer(), new StubbornLinkLayer(), new ClockLayer(), new SendApplicationLayer() };
 
 		QoS myQoS = createQoS("talk_stack", queue);
 		Channel channel = myQoS.createUnboundChannel("talk_channel");
 
-	    bind((SendApplicationLayer) queue[1], channel);
+	    bind((SendApplicationLayer) queue[3], channel);
 		start(channel);
 
 		System.out.println("Starting Appia...");

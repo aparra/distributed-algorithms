@@ -24,4 +24,6 @@ Exercícios da disciplina de algoritmos distribuídos ministrada por Gustavo M. 
 
 Exercício 1: br.ufscar.sorocaba.appia.services.job
 
-Exercício 2: br.ufscar.sorocaba.appia.services.talk 
+Exercício 2: br.ufscar.sorocaba.appia.datalink.fairloss
+
+Exercício 3: br.ufscar.sorocaba.appia.datalink.perfect
