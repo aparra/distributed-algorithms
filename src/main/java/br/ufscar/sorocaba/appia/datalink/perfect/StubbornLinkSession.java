@@ -49,5 +49,6 @@ public class StubbornLinkSession extends Session {
 			
 			initAndGo(sendableEvent);
 		}
+		go(event);
 	}
 }
