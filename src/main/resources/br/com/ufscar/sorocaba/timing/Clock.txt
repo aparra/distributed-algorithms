@@ -1,0 +1,5 @@
+Como podemos, a partir da ordem parcial dada pela relação de precedência causal, criar uma ordenação total de eventos em um sistema distribuído? Quais são as propriedades mais importantes desta ordenação total?
+
+A ordenação total dos eventos se dá quando é possível definir a ordem de quaisquer dois eventos. De acordo com as propriedades dos relógios nenhum par de eventos terá uma mesma marcação (número do processo, contador), pois basta ordenar os eventos de acordo com o tempo que eles ocorrem em seus processos e desfazer empates comparando uma propriedade arbitrária dos processos, como por exemplo, seu identificador.
+
+Processos diferentes com marcações de tempo iguais são considerados concorrentes, nenhuma suposição sobre a ordem dos eventos pode (o quer) ser feita. Qualquer ordenação desses eventos é considerada válida, como por exemplo, ordenação por processo.

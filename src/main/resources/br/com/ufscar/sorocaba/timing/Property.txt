@@ -1,0 +1,11 @@
+Um sistema distribuídos possui a seguinte propriedade: para qualquer máquina, nenhuma requisição demora mais do que uma semana para ser processada. Este sistema pode ser modelado como um sistema síncrono, assíncrono ou parcialmente síncrono?
+
+Resposta Síncrono:
+Existem uma propriedade forte com relação ao tempo de processamento de uma mensagem, se imbutirmos o tempo de transporte de mensagens (latência) no prazo de processamento, qualquer violação desse tempo pode ser considerado como uma falha de processamento.
+
+Modelos assíncronos: não existem limites de processamento, um processo pode ter tempo de processamento arbitrariamente grande.
+Modelos paricalmente síncronos: o período de assincronia do sistema pode levar a quebra da barreira de processamento estipulado (uma semana).
+
+Resposta Assíncrono: DELTA = DELTAp + 2 . DELTAt, como só conhecemos o tempo de processamento de DELTAp, não temos garantia sobre o tempo da transmissão das mensagens, logo não tempos nenhuma garantia sobre o tempo de execução total (processamento + transporte), caracterizando um sistema assíncrono.
+
+Resposta Parcialmente Síncrono: Assume-se que a propriedade estabelicida é o DELTA estabelecido, tempo t que o algoritmo se tornou síncrono.
