@@ -1,0 +1,10 @@
+É fundamental para o funcionamento da implementação do detector de falhas perfeito futuro e da eleição de líder futura o aumento do tempo de espera por ∆ a cada falsa suspeita?
+
+Não, o ∆ é uma otimização para detecção de falhas. Ele é utilizado para garantir os ajustes dos timeouts para diminuir a detecção de falhas indevidas.
+
+Mecanismos de detecção de falha e eleição de líder trabalhando com timeouts abaixo da realidade do sistema provocam constante falsas suspeitas, pois estão subajustados à latência e processamento do sistema.
+
+Detectores de falhas com um ∆ muito alto (arbitrariamente grande) podem ser tão ineficientes quanto aos detectores subajustados, pois podem demorar tempo o suficiente para serem irrelevantes ao sistema distribuído, sendo mais um processo consumindo processamento que não é capaz de detectar falhas em período t necessário.
+
+Detectores de falha que já iniciaram com um bom tempo ∆ podem sofrer aumento indevido de tempo provocando perda de desempenho no mecanismo de deteção de falhas e eleição.
+	

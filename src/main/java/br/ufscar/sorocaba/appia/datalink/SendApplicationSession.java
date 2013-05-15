@@ -64,8 +64,8 @@ public class SendApplicationSession extends Session {
 
 	private class MessageReader extends Thread {
 
-		public boolean ready = false;
-		public Channel channel;
+		private boolean ready = false;
+		private Channel channel;
 		private BufferedReader buffer = new BufferedReader(new InputStreamReader(System.in));
 
 		public MessageReader(Channel channel) {

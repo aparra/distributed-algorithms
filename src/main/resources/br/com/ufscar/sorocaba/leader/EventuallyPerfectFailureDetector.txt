@@ -1,0 +1,9 @@
+Faz sentido tentar implementar, usando Appia, as abstrações de detector de falhas perfeito como apresentadas em sala de aula? Por quê?
+
+Depende da forma que o sistema é implementado. Caso o sistema seja criado de forma síncrona e não utilize um modelo de crash-recovery o detector de falhas perfeitas pode ser utilziado e terá um bom desempenho.
+
+No caso das implementações realizadas até agora, rodando multi-processos localmente é fácil implementar um sistema síncrono pois existe um relógio global, mesmo toda a dificuldade oferecida pelo Appia para criação do conseito de tempo. Se utilizarmos esse detector de falhas em um sistema assíncrono ou parcialmente síncrono, existe a possibilidade de detectar um processo como falho devido ao aumento arbitrário da latência.
+
+De acordo com a propriedade PFD1: Strong completeness: Eventually, every process that crashes is permanently detected by every correct process, processos detectados falhos indevidamente permanencem falhos.
+
+Implementação no Appia: TCPPerfect
