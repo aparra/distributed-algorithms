@@ -1,0 +1,9 @@
+Por que a difusão de melhor esforço, mesmo usando canais perfeito, só faz afirmações sobre processos corretos? O que pode acontecer na falha de um processo?  Dê um exemplo de cenário de falha.
+
+Porque uma mensagem só não é perdida quando é enviada por um processo correto e recebida por outro processo correto. Nenhuma mensagem é criada pelo canal de transmissão, ele apenas garante a entrega por insistência desde que o processo remetente mantenha-se correto tempo suficiente para a entrega da mensagem. Em outras palavras, se o processo remetente falhar antes que a mensagem seja recebida por um outro processo correto ela não será recebida por mais nenhum processo, é como se a mensagem nunca tivesse existido (perda), pois o remetente original não está mais no ar para realizar a retransmissão insistente da mensagem, fator que garante a entrega para algum processo correto no tempo t (futuro).
+
+Exemplo do cenário de falha: Uma venda de um livro é realizada. Após a confirmação do pagamento o processo confirma o débito com o cliente e envia uma mensagem para envio do produto, o processo cai antes que a mensagem seja entregue ao(s) seu(s) destinatário(s). Os outros processos não conhecem a venda realizada e podem vender o livro comprado (e pago) pelo cliente A para o cliente B.
+
+É claro que toda essa situação pode ser contornada caso o processo de venda mantenha-se seu estado de forma não-volátil que permite a recuperação das informações no momento da recuperação ou por intervensão manual (humana).
+
+Na difusão confiável existe uma situação onde uma mensagem enviada por um processo não chega em nenhum dos outros processos. Que situação é esta? Dê um exemplo. A ocorrência desta situação viola as propriedades da difusão?
