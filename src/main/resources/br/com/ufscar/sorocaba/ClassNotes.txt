@@ -1,0 +1,107 @@
+Modelos de falha:
+
+* falha e para (crash-stop): neste modelo, assume-se que um processo não tem capacidade de se recuperar de uma falha, ou seja, a partir do momento que o processo falhou ele será considerado falho até o infinito.
+
+* falha por omissão (omission): o tipo mais geral de falha, acontece quando um processo deveria enviar / receber uma mensagem, mas isso não acontece devido a overflow de algum buffer ou congestionamento na rede de comunicação (perda de mensagens).
+
+* falha e recuperação (crash-recovery): neste modelo, assume-se que processos passam por períodos de instabilidade (falham) e conseguem se recuperar mantendo-se corretos até o infinito (podemos considerar o infinito até o fim da computação de uma requisição).
+
+Considerações:
+
+- dizemos que um processo está com defeito quando o processo falha e nunca se recupera (crash-stop) ou quando o processo continua infinitamente falhando e se recuperando. Caso contrário, o processo está correto;
+- um processo pode falhar e parar de enviar mensagens, mas pode se recuperar mais tarde, isso pode ser visto como uma falha por omissão com uma exceção: um processo pode sofrer de amnésia (perda do estado interno);
+- Perda de memória de um processo complica significativamente o projeto de algoritmos, porque após a recuperação, o processo pode enviar novas mensagens que contradizem as mensagens que o processo poderia ter enviado antes da falha. Para lidar com este problema, assume-se que processos possuem armazenamento estável (também chamado de log, não volátil), que pode ser acessado para recuperar operações realizadas;
+- Uma recuperação de falha corresponde a uma falha por omissão, se considerarmos que cada processo armazena todos os dados necessários para reinicializar seu estado antes da falha. Isto não é muito prático porque o acesso ao armazenamento estável é geralmente caro. Portanto, uma questão crucial na elaboração de algoritmos falha e recuperação é minimizar o acesso ao armazenamento estável;
+
+Comunicação:
+
+É razoável supor que a probabilidade de uma mensagem chegar ao seu destino é diferente de zero. Assumindo a suposição como verdade, uma maneira simples de superar a insegurança inerente da rede é continuar a retransmitir mensagens até que eles atinjam seus destinos. Dado que a probalidade de entrega é diferente de zero a mensagem irá chegar ao seu destino mesmo que demore um tempo arbitrariamente grande.
+
+* links perda-justa: um processo correto envia um número infinito de mensagens para outro processo correto (que por usa vez recebe um número infinito de mesanges). A abstração nesse modelo é a troca de mensagens entre processos corretos, caso um processo não seja correto ele não envia e/ou recebe mensagens.
+
+* links insistente: abstração para retransmissão de mensagens (retransmite para sempre). As mensagens enviadas por um processo que se mantém correto por tempo infinito serão retransmitidas infinitamente e possuem probabilidade maior que zero de serem entregues (basta que o processo de destino matenha-se correto, a partir do envio da mensagem m, tempo suficiente para transmissão de m). (mensagens são duplicadas nesse modelo) -> utiliza a abstração links perda-justa
+
+* links perfeitos: Ligações perfeitas são caracterizados por três propriedades: entrega confiável (links insistentes) em conjunto com a propriedade sem duplicação garante que cada mensagem enviada por um processo de correto é entregue ao destinatário exatamente uma vez, se o receptor também estiver correto. A terceira propriedade, "sem criação de mensagens" (nenhuma mensagem é entregue, a menos que ela foi enviada), é a mesma que nas outras abstrações. (mensagens não são duplicadas nesse modelo, mantem um registro de todas as mensagens que foram entregues no passado) (problema com memória volátil) (entrega confiável desde que o processo remetente nunca falhe após o envio de uma mensagem) -> utiliza a abstração links insitesntes
+
+- otimização: À primeira vista, pode-se pensar em uma maneira simples de otimizar este problema fazendo com que o processo de destino confirme o recebimento da mensagem ao remetente que por usa vez, promete não enviar mais a mensagen (mensagem atingiu o destino).
+
+- Algoritmos que armazenam as mensagens entregues em memória volátil estão fatalmente sujeitos a duplicação de mensagens (ferindo a propriedade de não duplicação dos links perfeitos). Se o processo falhar, o estado é perdido. Após sua recuperação (num modelo crash-recovery), o processo não vai mais lembrar que as mensagens já foram entregues (aminésia) e pode entregar a mesma mensagem duas vezes a camada de cima (aplicação). Para evitar esse problema é preciso armazenar as mensagens recebidas (entregues para a camada de cima) de forma estável (não volátil, ex: disco) para que o processo consiga recompor seu estado antes da falha (re-encarnação).
+
+Suposições de tempo:
+
+* assincrono: não faz nenhuma suposição sobre tempo com relação a processos e comunicação (links). Assumimos que processos não têm acesso a qualquer tipo de relógio físico e não estabelecemos limites sobre atrasos de processamento ou de comunicação.
+
+- mesmo sem a suposta existência de um relógio físico é possível medir a passagem do tempo através de relógios lógicos (relógio de Lamport), que são marcações sequenciais nas mensagens trocadas entre processos e eventos criados no mesmo processo. (tempo medido com relação a comunicação)
+
+1. Cada processo p mantém um inteiro chamado relógio lógico, inicialmente 0.
+2. Sempre que ocorre um evento no processo p, o relógio lógico é incrementado por uma unidade.
+3. Quando o processo p envia uma mensagem, ele adiciona uma marcação de tempo contendo o valor de seu relógio lógico, no momento que a mensagem é enviada.
+4. Quando o processo de q recebe a messagem m com a marcação de tempo de p, o processo q incrementa seu relógio lógico da seguinte maneira: 
+			relógio lógico de q (lq) := max {lq, tm} + 1, onde tm é a marcação de tempo contida na mensagem
+		
+Um aspecto interessante de relógios lógicos é o fato de que eles capturam causa-efeito relações em sistemas onde os processos só podem interagir através de trocas de mensagens. 
+
+Dizemos que um evento e1 pode ter, potencialmente, causado outro evento e2, denominado e1 → e2, quando a seguinte condição se aplicam:
+
+(A) e1 e e2 ocorreram no mesmo processo de p e e1 ocorreu antes de e2;
+(B) e1 corresponde ao envio de uma mensagem m em p e e2 o recebimento desta mensagem em q;
+(C) existe algum evento e', tal que e1 → e' e e' → e2;
+
+* síncrono: não existe um limite superior conhecido ligado aos atrasos de processamento + transmissão. Ou seja, o tempo tomado por qualquer processo de execução de um passo é sempre inferior a esse limite.
+
+possíveis vantagens:
+- detecção de falhas baseado em tempo de resposta (processo não respondeu uma mensagem [hearbeat] dentro do limite estabelicido é porque não é mais correto);
+- deteção de sobrecarga de links por atrasos comunicação (trânsito de mensagens);
+- coordenação com base no tempo. Pode-se implementar uma abstração de concessão que prevê o direito de executar alguma ação durante um período de tempo fixo, por exemplo, para a manipulação de um arquivo específico. O direito expira automaticamente no final do período de tempo;
+- possibilidade de relógios locais sincronos com um valor de atraso conhecido e constante (δ);
+
+desvantagem: dificuldade de construir um sistema com os pressupostos assertivos de tempo. Isso normalmente requer uma análise cuidadosa da rede e a carga de  processamento, utilização do processador apropriado e algoritmos de escalonamento de rede. Em sistemas como a Internet, por exemplo, deve-se estabelecer valores muito grandes para limites de processamento e comunicação. Isto significa que considerar os valores de pior caso que normalmente são muito mais elevados do que os valores médios deixaria o sistema extremamente lento.
+
+* parcialmente sincrono: Geralmente, os sistemas distribuídos parecem ser síncronos. Mais precisamente, para a maioria dos sistemas que conhecemos, é relativamente fácil definir limites de tempo físicos (timeouts) que são respeitados a maior parte do tempo. Há, no entanto, períodos em que os limites estabelecidos não se sustentam, ou seja, períodos em que o sistema é assíncrono. Estes são os períodos em que a rede está em sobrecarga. A suposição desta abstração simplesmente capta o fato de que o sistema pode nem sempre ser síncrono, e não há nenhum limite sobre o período durante o qual é assíncrona. No entanto, espera-se que há períodos em que o sistema é síncrono (estabilização), e alguns desses períodos são longos o suficiente para um algoritmo fazer algo de útil ou terminar a sua execução.
+
+Detector de falhas:
+
+Um detector de falhas que fornece informações sobre os processos que deixaram de funcionar e os que são corretos, esta informação não é necessariamente precisa. Em particular, vamos considerar detectores de falhas que encapsulam as premissas de tempo de um sistema síncrono e detectores de falhas que encapsulam as premissas de tempo de um sistema parcialmente síncrono.
+
+* detector de falhas perfeito: em sistemas síncronos e assumindo uma abstração processo de crash-stop, falhas podem ser detectadas com precisão usando o tempo limite de processsamento + transmissão. O detector de falhas perfeito nunca muda de opinião (detecções permanentes), em outras palavras, uma vez que um processo p for detectado (por ter deixado de funcionar) por algum processo q, o processo p permanece detectado como flaha por q para sempre. (nunca detecta um processo noncrashed).
+
+Por exemplo, vamos supor que um processo envia uma mensagem para um outro processo e aguarda uma resposta (heartbeat). Se o processo destinatário não falhar, então é garantido que a reposta chegue no máximo ao soma do atraso de processamento do pior caso mais duas vezes o pior caso de atraso da transmissão da mensagem (um atraso no envio do request outro atraso do response). Usando o seu próprio relógio, o processo remetente pode cronometrar o tempo máximo que sua mensagem deve ser respondida, caso constrário o processo de destino é detectado como falho (não correto).
+
+- otimização: nenhuma mensagem heartbeat é enviada para um processo que é detectado como falho
+- utilizado na abstração de tempo síncrono
+
+* detector de falhas futuras (eventualmente perfeito): uma abstração de detector de falhas futuras (eventualmente perfeito) é capaz de detectar falhas com precisão depois de algum a priori ponto desconhecido no tempo, mas pode cometer erros antes desse tempo (período de assincronia conduz a falsas suspeitas de falhas). A suspeita de falha pode estar errado em um sistema parcialmente síncrono, a rede pode estar congestionada levando a falsa suposição de falha nos processos.
+
+- utilizado na abstração de tempo parcialmente síncrono
+- problema com timeouts curtos e longos
+
+Eleição de líder:
+
+Um processo pode agir como o líder (representante único de um grupo de processos) que coordena alguns passos de um algoritmo distribuído, e tem a confiança de outros processos para atuar como seu líder. A abstração da eleição de um líder pode ser implementada de uma forma simples utilizando um detector de falhas perfeito. Um novo líder só é eleito caso seja detectado falha no líder atual.
+
+* eleição monárquica: Um processo pode se tornar líder apenas se todos os processos com a maior pontuação já não são mais corretos (falharam).
+
+- eventualmente todos os processos concordam sobre que é o lider (consensu)
+- performance: O processo de se tornar um líder é uma operação local. O tempo para reagir a uma falha e se tornar o novo líder depende diretamente da latência do detector de falhas.
+
+* eleição de líder por época (eventual): Em vez de se concentrar em processos falhos, talvez seja melhor olhar para os corretos. Em vez disso, podemos implementar uma noção mais fraca de eleição do líder que garante a exclusividade do líder apenas eventualmente (por épocas). Uma vez que um único líder é determinado, ele não muda mais (ao menos que ele falhe), podemos dizer que o líder tenha se estabilizado.
+
+- modelo crash-recovery
+- eventualmente todos os processos concordam sobre que é o lider (consensu)
+- performance: O processo de se tornar um líder é uma operação local. O tempo para reagir a uma falha e se tornar o novo líder depende diretamente da latência do detector de falhas.
+
+Broadcast
+
+Há muitos casos em que mais do que dois processos necessitam operar de maneira coordenada, a solução para trabalhar com esse modelo computacional é utilizar uma forma de difusão da mensagem pela rede de forma que uma mensagem seja enviada para todos os seus destinatários.
+
+* brodcast (transmissão de) melhor esforço: utiliza links perfeitos para a difusão (envio) das mensages, dessa forma existe garantia de entrega para todos os processos destinatários correntes, desde que o remetente se mantenha correto tempo suficiente para a entrega. (não existe duplicação de mensagens)
+
+- não faz nenhuma suposição sobre detecção de falhas
+- processo remetente falha sileciosamente, mesagens podem ser perdidas ou entregues parcialmente podendo levar o sistema a um estado incosistente, em outras palavras õs processos não concordam com a entrega da mensagem
+
+* broadcast confiável: extende o modelo do melhor esforço. Caso o processo destinatário detecta que o remetente falhou, é de sua responsabilidade retransmitir a mensagem em nome do remetente original. Dessa forma as mensagens ganham longevidade desde que consigam chegar a processos corretos existe a garantia de retransmissão.
+
+
+
+
+
