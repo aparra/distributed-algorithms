@@ -6,6 +6,6 @@ Existem uma propriedade forte com relação ao tempo de processamento de uma mensa
 Modelos assíncronos: não existem limites de processamento, um processo pode ter tempo de processamento arbitrariamente grande.
 Modelos paricalmente síncronos: o período de assincronia do sistema pode levar a quebra da barreira de processamento estipulado (uma semana).
 
-Resposta Assíncrono: DELTA = DELTAp + 2 . DELTAt, como só conhecemos o tempo de processamento de DELTAp, não temos garantia sobre o tempo da transmissão das mensagens, logo não tempos nenhuma garantia sobre o tempo de execução total (processamento + transporte), caracterizando um sistema assíncrono.
+Resposta Assíncrono: DELTA = DELTAp + 2 * DELTAt, como só conhecemos o tempo de processamento de DELTAp, não temos garantia sobre o tempo da transmissão das mensagens, logo não tempos nenhuma garantia sobre o tempo de execução total (processamento + transporte), caracterizando um sistema assíncrono.
 
 Resposta Parcialmente Síncrono: Assume-se que a propriedade estabelicida é o DELTA estabelecido, tempo t que o algoritmo se tornou síncrono.

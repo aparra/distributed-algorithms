@@ -1,10 +1,10 @@
 Modelos de falha:
 
-* falha e para (crash-stop): neste modelo, assume-se que um processo não tem capacidade de se recuperar de uma falha, ou seja, a partir do momento que o processo falhou ele será considerado falho até o infinito.
+* falha e para (crash-stop) (falha por colapso): neste modelo, assume-se que um processo não tem capacidade de se recuperar de uma falha, ou seja, a partir do momento que o processo falhou ele será considerado falho até o infinito.
 
 * falha por omissão (omission): o tipo mais geral de falha, acontece quando um processo deveria enviar / receber uma mensagem, mas isso não acontece devido a overflow de algum buffer ou congestionamento na rede de comunicação (perda de mensagens).
 
-* falha e recuperação (crash-recovery): neste modelo, assume-se que processos passam por períodos de instabilidade (falham) e conseguem se recuperar mantendo-se corretos até o infinito (podemos considerar o infinito até o fim da computação de uma requisição).
+* falha e recuperação (crash-recovery) (colapso com recuperação): neste modelo, assume-se que processos passam por períodos de instabilidade (falham) e conseguem se recuperar mantendo-se corretos até o infinito (podemos considerar o infinito até o fim da computação de uma requisição).
 
 Considerações:
 
@@ -27,6 +27,11 @@ Comunicação:
 
 - Algoritmos que armazenam as mensagens entregues em memória volátil estão fatalmente sujeitos a duplicação de mensagens (ferindo a propriedade de não duplicação dos links perfeitos). Se o processo falhar, o estado é perdido. Após sua recuperação (num modelo crash-recovery), o processo não vai mais lembrar que as mensagens já foram entregues (aminésia) e pode entregar a mesma mensagem duas vezes a camada de cima (aplicação). Para evitar esse problema é preciso armazenar as mensagens recebidas (entregues para a camada de cima) de forma estável (não volátil, ex: disco) para que o processo consiga recompor seu estado antes da falha (re-encarnação).
 
+Associação:
+
+Falha-e-para: perda-justa, insistente e perfeito
+Falha-e-recuperação: perda-justa e perfeito com registro
+
 Suposições de tempo:
 
 * assincrono: não faz nenhuma suposição sobre tempo com relação a processos e comunicação (links). Assumimos que processos não têm acesso a qualquer tipo de relógio físico e não estabelecemos limites sobre atrasos de processamento ou de comunicação.
@@ -43,14 +48,14 @@ Um aspecto interessante de relógios lógicos é o fato de que eles capturam cau
 
 Dizemos que um evento e1 pode ter, potencialmente, causado outro evento e2, denominado e1 → e2, quando a seguinte condição se aplicam:
 
-(A) e1 e e2 ocorreram no mesmo processo de p e e1 ocorreu antes de e2;
+(A) e1 e e2 ocorreram no mesmo processo p e e1 ocorreu antes de e2;
 (B) e1 corresponde ao envio de uma mensagem m em p e e2 o recebimento desta mensagem em q;
 (C) existe algum evento e', tal que e1 → e' e e' → e2;
 
 * síncrono: não existe um limite superior conhecido ligado aos atrasos de processamento + transmissão. Ou seja, o tempo tomado por qualquer processo de execução de um passo é sempre inferior a esse limite.
 
 possíveis vantagens:
-- detecção de falhas baseado em tempo de resposta (processo não respondeu uma mensagem [hearbeat] dentro do limite estabelicido é porque não é mais correto);
+- detecção de falhas baseado em tempo de resposta (processo não respondeu uma mensagem [heartbeat] dentro do limite estabelicido é porque não é mais correto);
 - deteção de sobrecarga de links por atrasos comunicação (trânsito de mensagens);
 - coordenação com base no tempo. Pode-se implementar uma abstração de concessão que prevê o direito de executar alguma ação durante um período de tempo fixo, por exemplo, para a manipulação de um arquivo específico. O direito expira automaticamente no final do período de tempo;
 - possibilidade de relógios locais sincronos com um valor de atraso conhecido e constante (δ);
@@ -81,25 +86,30 @@ Um processo pode agir como o líder (representante único de um grupo de process
 
 * eleição monárquica: Um processo pode se tornar líder apenas se todos os processos com a maior pontuação já não são mais corretos (falharam).
 
-- eventualmente todos os processos concordam sobre que é o lider (consensu)
+- eventualmente todos os processos concordam sobre quem é o lider (consensu)
 - performance: O processo de se tornar um líder é uma operação local. O tempo para reagir a uma falha e se tornar o novo líder depende diretamente da latência do detector de falhas.
 
 * eleição de líder por época (eventual): Em vez de se concentrar em processos falhos, talvez seja melhor olhar para os corretos. Em vez disso, podemos implementar uma noção mais fraca de eleição do líder que garante a exclusividade do líder apenas eventualmente (por épocas). Uma vez que um único líder é determinado, ele não muda mais (ao menos que ele falhe), podemos dizer que o líder tenha se estabilizado.
 
 - modelo crash-recovery
-- eventualmente todos os processos concordam sobre que é o lider (consensu)
+- eventualmente todos os processos concordam sobre quemß é o lider (consensu)
 - performance: O processo de se tornar um líder é uma operação local. O tempo para reagir a uma falha e se tornar o novo líder depende diretamente da latência do detector de falhas.
+
+Associação
+
+Síncrono: detector de falhas perfeito, eleição de líder
+Parcialmente síncrono: detector de falhas perfeito futuro, eleição de líder futura
 
 Broadcast
 
 Há muitos casos em que mais do que dois processos necessitam operar de maneira coordenada, a solução para trabalhar com esse modelo computacional é utilizar uma forma de difusão da mensagem pela rede de forma que uma mensagem seja enviada para todos os seus destinatários.
 
-* brodcast (transmissão de) melhor esforço: utiliza links perfeitos para a difusão (envio) das mensages, dessa forma existe garantia de entrega para todos os processos destinatários correntes, desde que o remetente se mantenha correto tempo suficiente para a entrega. (não existe duplicação de mensagens)
+* brodcast (transmissão de) melhor esforço: utiliza links perfeitos para a difusão (envio) das mensages, dessa forma existe garantia de entrega para todos os processos destinatários corretos, desde que o remetente se mantenha correto tempo suficiente para a entrega. (não existe duplicação de mensagens)
 
 - não faz nenhuma suposição sobre detecção de falhas
-- processo remetente falha sileciosamente, mesagens podem ser perdidas ou entregues parcialmente podendo levar o sistema a um estado incosistente, em outras palavras õs processos não concordam com a entrega da mensagem
+- processo remetente falha sileciosamente, mesagens podem ser perdidas ou entregues parcialmente podendo levar o sistema a um estado incosistente, em outras palavras os processos não concordam com a entrega da mensagem
 
-* broadcast confiável: extende o modelo do melhor esforço. Caso o processo destinatário detecta que o remetente falhou, é de sua responsabilidade retransmitir a mensagem em nome do remetente original. Dessa forma as mensagens ganham longevidade desde que consigam chegar a processos corretos existe a garantia de retransmissão.
+* broadcast confiável: extende o modelo do melhor esforço. Caso o processo destinatário detecta que o remetente falhou, é sua responsabilidade retransmitir a mensagem em nome do remetente original. Dessa forma as mensagens ganham longevidade desde que consigam chegar a processos corretos existe a garantia de retransmissão.
 
 
 

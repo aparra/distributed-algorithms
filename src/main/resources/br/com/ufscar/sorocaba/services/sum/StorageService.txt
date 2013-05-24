@@ -1,4 +1,4 @@
-Utilizando a notação de módulo e de implementação apresentada em sala, construa a interface e forneça o pseudo-código da implementação do se- guinte serviço:
+Utilizando a notação de módulo e de implementação apresentada em sala, construa a interface e forneça o pseudo-código da implementação do seguinte serviço:
 
 Requisições: Armazena: recebe um inteiro e o armazena.
 Indicações: Centena: indica que a soma dos inteiros armazenados ultrapassou uma centena, para todas as centenas.
