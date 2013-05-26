@@ -21,7 +21,7 @@ Comunicação:
 
 * links insistente: abstração para retransmissão de mensagens (retransmite para sempre). As mensagens enviadas por um processo que se mantém correto por tempo infinito serão retransmitidas infinitamente e possuem probabilidade maior que zero de serem entregues (basta que o processo de destino matenha-se correto, a partir do envio da mensagem m, tempo suficiente para transmissão de m). (mensagens são duplicadas nesse modelo) -> utiliza a abstração links perda-justa
 
-* links perfeitos: Ligações perfeitas são caracterizados por três propriedades: entrega confiável (links insistentes) em conjunto com a propriedade sem duplicação garante que cada mensagem enviada por um processo de correto é entregue ao destinatário exatamente uma vez, se o receptor também estiver correto. A terceira propriedade, "sem criação de mensagens" (nenhuma mensagem é entregue, a menos que ela foi enviada), é a mesma que nas outras abstrações. (mensagens não são duplicadas nesse modelo, mantem um registro de todas as mensagens que foram entregues no passado) (problema com memória volátil) (entrega confiável desde que o processo remetente nunca falhe após o envio de uma mensagem) -> utiliza a abstração links insitesntes
+* links perfeitos: Ligações perfeitas são caracterizados por três propriedades: entrega confiável (links insistentes) em conjunto com a propriedade sem duplicação garante que cada mensagem enviada por um processo correto é entregue ao destinatário exatamente uma vez, se o receptor também estiver correto. A terceira propriedade, "sem criação de mensagens" (nenhuma mensagem é entregue, a menos que ela foi enviada), é a mesma que nas outras abstrações. (mensagens não são duplicadas nesse modelo, mantem um registro de todas as mensagens que foram entregues no passado) (problema com memória volátil) (entrega confiável desde que o processo remetente nunca falhe após o envio de uma mensagem) -> utiliza a abstração links insitesntes
 
 - otimização: À primeira vista, pode-se pensar em uma maneira simples de otimizar este problema fazendo com que o processo de destino confirme o recebimento da mensagem ao remetente que por usa vez, promete não enviar mais a mensagen (mensagem atingiu o destino).
 
@@ -68,7 +68,7 @@ Detector de falhas:
 
 Um detector de falhas que fornece informações sobre os processos que deixaram de funcionar e os que são corretos, esta informação não é necessariamente precisa. Em particular, vamos considerar detectores de falhas que encapsulam as premissas de tempo de um sistema síncrono e detectores de falhas que encapsulam as premissas de tempo de um sistema parcialmente síncrono.
 
-* detector de falhas perfeito: em sistemas síncronos e assumindo uma abstração processo de crash-stop, falhas podem ser detectadas com precisão usando o tempo limite de processsamento + transmissão. O detector de falhas perfeito nunca muda de opinião (detecções permanentes), em outras palavras, uma vez que um processo p for detectado (por ter deixado de funcionar) por algum processo q, o processo p permanece detectado como flaha por q para sempre. (nunca detecta um processo noncrashed).
+* detector de falhas perfeito: em sistemas síncronos e assumindo uma abstração processo de crash-stop, falhas podem ser detectadas com precisão usando o tempo limite de processsamento + transmissão. O detector de falhas perfeito nunca muda de opinião (detecções permanentes), em outras palavras, uma vez que um processo p for detectado (por ter deixado de funcionar) por algum processo q, o processo p permanece detectado como fqlha por q para sempre. (nunca detecta um processo noncrashed).
 
 Por exemplo, vamos supor que um processo envia uma mensagem para um outro processo e aguarda uma resposta (heartbeat). Se o processo destinatário não falhar, então é garantido que a reposta chegue no máximo ao soma do atraso de processamento do pior caso mais duas vezes o pior caso de atraso da transmissão da mensagem (um atraso no envio do request outro atraso do response). Usando o seu próprio relógio, o processo remetente pode cronometrar o tempo máximo que sua mensagem deve ser respondida, caso constrário o processo de destino é detectado como falho (não correto).
 
@@ -92,7 +92,7 @@ Um processo pode agir como o líder (representante único de um grupo de process
 * eleição de líder por época (eventual): Em vez de se concentrar em processos falhos, talvez seja melhor olhar para os corretos. Em vez disso, podemos implementar uma noção mais fraca de eleição do líder que garante a exclusividade do líder apenas eventualmente (por épocas). Uma vez que um único líder é determinado, ele não muda mais (ao menos que ele falhe), podemos dizer que o líder tenha se estabilizado.
 
 - modelo crash-recovery
-- eventualmente todos os processos concordam sobre quemß é o lider (consensu)
+- eventualmente todos os processos concordam sobre quem é o lider (consensu)
 - performance: O processo de se tornar um líder é uma operação local. O tempo para reagir a uma falha e se tornar o novo líder depende diretamente da latência do detector de falhas.
 
 Associação

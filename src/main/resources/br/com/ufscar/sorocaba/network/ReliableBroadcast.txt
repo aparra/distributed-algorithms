@@ -1,11 +1,11 @@
-Na difusão confiável existe uma situação onde uma mensagem enviada por um processo não chega em nenhum dos outros processos. Que situação é esta? Dê um exemplo. A ocorrência desta situação viola as propriedades da difusão?
+Na difus√£o confi√°vel existe uma situa√ß√£o onde uma mensagem enviada por um processo n√£o chega em nenhum dos outros processos. Que situa√ß√£o √© esta? D√™ um exemplo. A ocorr√™ncia desta situa√ß√£o viola as propriedades da difus√£o?
 
-Quando o processo remetente não se mantém correto tempo suficiente para entregar a mensagem para pelo menos um outro processo correto. Por exemplo, o processo P1 inicia o processo de difusão da mensagem M1. P1 envia M1 para P2 (que é um processo correto) e falha. P2 falha antes de assumir a responsabilidade de retransmitir M1. A mensagem M1 existiu por um curto período e não pode ser retransmtida para mais nenhum outro processo. 
+Quando o processo remetente n√£o se mant√©m correto tempo suficiente para entregar a mensagem para pelo menos um outro processo correto. Por exemplo, o processo P1 inicia o processo de difus√£o da mensagem M1. P1 envia M1 para P2 (que √© um processo correto) e falha. P2 falha antes de assumir a responsabilidade de retransmitir M1. A mensagem M1 existiu por um curto per√≠odo e n√£o pode ser retransmtida para mais nenhum outro processo. 
 
-A mensagem M1, do ponto de vista de um observador externo que a viu sendo criada, é o segredo que foi para o túmulo junto com P1 e P2. Do ponto de vista dos outros processos corretos P3..PN, a mensagem M1 nunca existiu.
+A mensagem M1, do ponto de vista de um observador externo que a viu sendo criada, √© o segredo que foi para o t√∫mulo junto com P1 e P2. Do ponto de vista dos outros processos corretos P3..PN, a mensagem M1 nunca existiu.
 
-A partir do momento que uma mensagem é recebida por um processo correto que percebe a falha no processo remetente (informação gerada pelo detector de falhas) e este processo destinatário se mantém correto até o "infinito", a mensagem não é perdida pois o processo destinatário assume a responsabilidade de retransmição da mensagem em nome do remetente original (que falhou), garantindo assim a difusão da mensagem para todos os processos corretos do sistema.
+A partir do momento que uma mensagem √© recebida por um processo correto que percebe a falha no processo remetente (informa√ß√£o gerada pelo detector de falhas) e este processo destinat√°rio se mant√©m correto at√© o "infinito", a mensagem n√£o √© perdida pois o processo destinat√°rio assume a responsabilidade de retransmi√ß√£o da mensagem em nome do remetente original (que falhou), garantindo assim a difus√£o da mensagem para todos os processos corretos do sistema.
 
-PS. Podemos assumir que um processo se mantém correto até o "infinito" quando pelo menos um processo correto recebe sua mensagem, seja ela enviada por um remetente original ou retransmetida por um processo destinatário que detectou uma falha.
+PS. Podemos assumir que um processo se mant√©m correto at√© o "infinito" quando pelo menos um processo correto recebe sua mensagem, seja ela enviada por um remetente original ou retransmetida por um processo destinat√°rio que detectou uma falha.
 
-A ocorrência dessa situação não viola as propriedades da difusão pois o comportamento estabelecido é como se a mensagem nunca tivesse exixtido.
+A ocorr√™ncia dessa situa√ß√£o n√£o viola as propriedades da difus√£o pois o comportamento estabelecido √© como se a mensagem nunca tivesse exixtido.
