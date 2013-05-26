@@ -1,0 +1,47 @@
+Aponte duas razões pelas quais a implementação de difusão confiável no modelo falha-e-para silencioso dada pelo Algoritmo 3.3 do livro não funciona no modelo falha-e-recuperação.
+
+1) Mensagens podem ser duplicadas porque o armazenamento das mensagens entregues é feito em memória volátil. Por exemplo, caso o processo P que já registrou a entrega da M1 falhe e se recupera ele perdeu todo o registro das mensagens entregues (aminésia) e está pronto para duplicar mensagens.
+
+2) Mensagens podem não ser entregues a todos os processos. Um processo que envia uma mensagem para um processo correto e cai é responsabilidade do processo remetente retransmitir, caso ele falhe também sem entregar para nenhum outro processo corretor a mensagem é perdidaneo.
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+Construa a interface (módulo) e forneça o pseudo-código da implementação (algoritmo) do serviço de entrega confiável (comum) com registro, para o modelo falha-e-recuperação. Dica: estenda o Módulo 3.2 e o Algoritmo 3.3.
+
+Module:
+	Name: LoggedReliableBroadcast, instance rb
+
+Events:
+	Request: <rb, Broadcast | m>: Broadcasts da menssagem m para todos os processos.
+	Indication: <rb, Deliver | p, m>: Entrega para a camada de cima a message m oriunda do processo p.
+
+Properties:
+	RB1: Validade: Se um processo correto p transmite uma mensagem m, então p, mais cedo ou mais tarde, entrega m (logada).
+	RB2: Não duplicação: Nenhuma mensagem logada é entregue mais de uma vez.
+	RB3: Não criação: Se um processo entrega uma mensagem m com remetente s, então m foi previamente transmitida por processo s.
+	RB4: Acordo: Se uma mensagem logada m é entregue por algum processo correto, então m (logada) é, mais cedo ou mais tarde, entregue por cada processo correto.
+
+Implements:
+	LogReliableBroadcast, instance rb.
+
+Uses:
+	BestEffortBroadcast, instance beb.
+
+uppon event <rb, Init> do
+	delivered := {};
+	store(delivered);
+
+uppon event <rb, Recovery> do
+	delivered := retrieve(delivered);
+	forall (DATA, s, m) ∈ delivered do
+		trigger <beb, Broadcast | [DATA, s, m]>;
+
+upon event <rb, Broadcast | m> do
+	trigger <beb, Broadcast | [DATA, self, m]>;
+	
+upon event <beb, Deliver | p, [DATA, s, m]> do 
+	if m ∉ delivered then
+		delivered := delivered ∪ {m};
+		store(delivered);
+		trigger <rb, Deliver | s, m>;
+		trigger <beb, Broadcast | [DATA, s, m]>;
