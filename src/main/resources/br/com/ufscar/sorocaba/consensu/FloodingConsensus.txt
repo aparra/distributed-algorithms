@@ -1,0 +1,12 @@
+Considere o Algoritmo 5.1 do livro, que implementa consenso. É essencial para o seu funcionamento a existência da mensagem Decided? Dê um exemplo da necessidade da mensagem ou modifique o argumento de correção para excluíla.
+
+Sem a alteração das propriedades do algoritomo a mensagem Decided é essencial para que se possa estabelecer consensu entre processos que não possuem o mesmo conjunto de propostas. Por exemplo, dado 4 processos corretos fazem broadcast de suas propostas. P1 envia sua proposta com sucesso para P2 e falha antes que sua proposta seja entregue para os outro processos. Após a finalização do envio das mensagens temos a seguinte configuração de message box:
+
+P1 - falho
+P2 - [m1, m2, m3, m4]
+P3 - [m2, m3, m4]
+P4 - [m2, m3, m4]
+
+P2 decide pela proposta de m1 (enviada por P1 - falho), que por sua vez é uma proposta conhecida apenas por P2. Os outros processos certamente não decidiram por m1 pois não conhecem essa mensagem. É através da mensagem Decided que uma proposta não conhecida por todos os processos se torna consensu, pois o processo que recebe Decided de um processo correto concordará com a decisão. A mensagem Decided vai se espalhar conquistando seguidores que ainda não possuem decisão.
+
+Para que a mensagem Decided deixe de ser fundamental no algoritmo é preciso incluir a propriedade de consistência de message box. Ou seja, todos os processos devem possuir o mesmo conjunto de propostas, dessa forma a decisão pode ser tomada localmente sem a necessidade de uma comunicação extra de decisão. Porém a garantia de sincronia do conjunto aumenta a complexidade do Algoritmo levando a mais retransmissões de messagens e/ou atraso na tomada de decisão devido mensagens que atingem parcialmente o conjunto de processos.
