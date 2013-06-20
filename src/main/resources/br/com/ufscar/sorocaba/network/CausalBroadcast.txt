@@ -1,0 +1,13 @@
+O Algoritmo 3.15 do livro, que implementa entrega causal não uniforme, está errado. Ele usa uma implementação de entrega confiável não uni- forme, mas supõe propriedades que não condizem com esta implemen- tação em seu argumento de correção. Mostre o erro no argumento de correção e no algoritmo através de um contra exemplo. Como é possível “consertar” esta implementação?
+
+ReliableBroadcast usa:
+	- broadcast de melhor esforço usa:
+		- canais perfeitos (garantia de entrega enquanto o processo se manter correto [insistente] e não duplicação de mensagens)
+		- mensagem recebida é retransmetida e logo em seguida entregue para a camada da aplicação de forma não uniforme, cada processo entrega a mensagem independente se outro processo correto também realizou a entrega
+		- mensagem recebida é retransmetida (n^2 mensagens rolando)
+
+"Correctness: For the validity property, consider a message m that is crb-broadcast by some correct process p. According to the validity property of the underlying reliable broadcast, p directly rb-delivers m. Consider the vector V′ that is rb-delivered together with m, which is taken from the vector clock V of p when it has rb-broadcast m. Since V may only have increased meanwhile, it holds V ≥ V ′ and m is crb-delivered immediately."
+		
+Correção ou propriedade de validade: p directly rb-delivers m (p imediatamente entrega m), p entrega m somente depois do broadcast. A mensagem m contem o valor do relógio de P com todas as suas dependências (ou seja, todas as mensages que P entregou, que por sua vez também retransmitiu, ou melhor continua retransmetindo enquanto é correto). Logo, quando P envia M, também já enviou todas as suas dependências.
+
+LONGEVIDADE DA MENSAGEM.
