@@ -1,0 +1,15 @@
+Considere o Algoritmo 5.2 do livro, que implementa consenso. Mostre que este algoritmo precisa das propriedades de completude e precisão fortes do detector de falhas perfeito (PFD1 e PFD2). Exiba onde estas propriedades são invocadas no argumento de correção e mostre um exemplo de como a violação de cada uma destas propriedades faz o algoritmo não funcionar corretamente (não respeitar as suas propriedades).
+
+Sem as propriedades do detector de falhas perfeito que garante que em um momento t todos os processos não corretos serão detectados como falhos e permacerão falhos até o infinito (modelo falha-e-para) não seria possível garantir progresso no algorito de consensu hierárquico, pois o processo Pn aguada que o processo Pn-1 tome sua decisão para que ele também possa tomar. Ou seja, existe uma dependência topológica para tomadas de decisão. Pn pode ficar eperando infinitamente uma mensagem de Pn-1 para tomar sua decisão. Com a utilização do detector de falhas, o processo Pn pode iniciar seu processamento de tomada decisão caso detecte que Pn-1 falhou, garantindo assim o progresso do algoritmo.
+
+- Caso a propriedade PFD1 seja violada, não existirá progresso por falta de incremento do round.
+
+-- detecção de mensagens garante o bypass do round (incremento do round mesmo sem o recebimento da mensagem)
+uponevent<P,Crash |p>do
+	detectedranks := detectedranks ∪ {rank(p)};
+
+-- round pode não ser incrementado por dependência de mensagem de um processo que falhou e não foi detectado	
+upon round ∈ detectedranks ∨ delivered[round] = TRUE do 
+	round := round + 1;
+	
+Cenário falho: P2 só pode tomar decisão após P1 ter tomado a sua decisão e realizar a difusão da sua computação. P1 falha antes da realização do passo de comunicação, P2 (e todos os processos que dependem de P2 para tomar sua decisão) esperarão miserávelmente (eternamente) por uma mensagem que nunca será entregue pois o remetente não é mais um processo correto.
