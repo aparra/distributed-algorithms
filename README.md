@@ -19,11 +19,3 @@ Exercícios da disciplina de algoritmos distribuídos ministrada por Gustavo M. 
 	$ java -jar ~/.m2/repository/org/projectlombok/lombok/0.9.3/lombok-0.9.3.jar
 
 6. Importe o projeto para o eclipse 
-
-## Lista de exercícios usando appia
-
-Exercício 1: br.ufscar.sorocaba.appia.services.job
-
-Exercício 2: br.ufscar.sorocaba.appia.datalink.fairloss
-
-Exercício 3: br.ufscar.sorocaba.appia.datalink.perfect
